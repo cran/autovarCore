@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>residual_outliers. autovarCore 1.0-0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">autovarCore 1.0-0</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Calculate dummy variables to mask residual outliers</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>residual_outliers(resid_matrix, number_of_rows)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>resid_matrix</dt>
+      <dd>A matrix of residuals. Column names are copied over to the returned result.</dd>
+      <dt>number_of_rows</dt>
+      <dd>The number of measurements that were input to the model. Since the length of the residual matrix is shorter depending on the amount of lags in the model, we use <code>number_of_rows</code> to specify the number of rows in the returned matrix.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+A matrix with dummy variables in columns following the procedure described above.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>This function returns a matrix with columns that have a <code>1</code> at indices where the residuals have an outlier, and a <code>0</code> everywhere else. Outliers are calculated per variable (column) separately. We consider residual outliers the rows in the column of residuals or in the column of squared residuals that are more than 2.5 times the standard deviation away from the mean (standard deviation and mean are calculated separately per column and for residuals/squared residuals). The dummy columns are prepended with zeros to match the size of the other input variables to the model.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>resid_matrix &lt;- matrix(rnorm(39 * 3),
+                       nrow = 39,
+                       ncol = 3,
+                       dimnames = list(NULL, c(&#39;rumination&#39;, &#39;happiness&#39;, &#39;activity&#39;)))
+resid_matrix[13, 2] &lt;- 48
+resid_matrix[23, 2] &lt;- -62
+resid_matrix[36, 2] &lt;- 33
+resid_matrix[27, 3] &lt;- 75
+resid_matrix
+</div>
+<div class='output'>        rumination    happiness    activity
+ [1,] -1.371250974   1.70716311  1.13703288
+ [2,]  0.614104585  -0.33256956 -0.42725349
+ [3,]  1.190919770  -1.66971752 -0.05865325
+ [4,]  0.789231366   0.11795709  0.33931925
+ [5,]  0.038039222   1.65342170  1.33927778
+ [6,] -1.081108257  -0.32286035 -0.58805066
+ [7,]  1.623369426   1.06516296  0.60055382
+ [8,]  0.289760884  -3.27485414 -0.66104895
+ [9,]  1.245896136   1.29333956  0.57720194
+[10,]  0.389772082   1.57052456 -0.08876772
+[11,]  0.358712427   1.36974398 -0.98367252
+[12,] -1.025433630  -0.02665345 -0.70682491
+[13,]  0.775573017  48.00000000  0.78497821
+[14,] -0.186925733  -0.66889088  1.48146686
+[15,] -0.366548649  -0.77810609 -0.70054760
+[16,]  1.001822088  -0.06220454  0.12435008
+[17,]  0.315701990   0.35899281 -1.27595435
+[18,]  0.102895430   0.62388349 -0.41275405
+[19,] -0.970793350   0.48599479  0.59333421
+[20,]  0.389457555  -0.02913179 -0.24941077
+[21,]  0.941124836  -0.43959275  0.92190167
+[22,]  1.499734412   0.94445621 -0.13523535
+[23,]  1.247399010 -62.00000000  0.24440387
+[24,] -0.007690873   0.68362030 -1.10645778
+[25,] -0.840802644   0.96296710 -0.96916976
+[26,]  0.204316050  -1.48470729  0.33294118
+[27,] -1.072999197   1.61136161 75.00000000
+[28,] -0.110584563   0.90956619 -0.15656425
+[29,] -0.785326989  -0.30358705 -0.44212303
+[30,] -1.148760063  -0.18244292  0.02191524
+[31,]  1.170929310   1.69560253 -0.21519413
+[32,]  1.559591885   0.04619016 -0.29946827
+[33,] -0.494878229   0.16810275 -0.79147547
+[34,]  0.352642600  -0.63158727  0.50493200
+[35,]  0.258570867   0.15021676 -0.72686198
+[36,] -1.250803457  33.00000000 -2.32446978
+[37,] -0.160327318  -1.06272874 -0.02380246
+[38,]  0.293791316  -0.56284273 -0.17824882
+[39,] -0.294281361   0.99946218  0.45349481
+</div>
+<div class='input'>autovarCore:::residual_outliers(resid_matrix, 40)
+</div>
+<div class='output'>      rumination happiness activity
+ [1,]          0         0        0
+ [2,]          0         0        0
+ [3,]          0         0        0
+ [4,]          0         0        0
+ [5,]          0         0        0
+ [6,]          0         0        0
+ [7,]          0         0        0
+ [8,]          1         0        0
+ [9,]          0         0        0
+[10,]          0         0        0
+[11,]          0         0        0
+[12,]          0         0        0
+[13,]          0         0        0
+[14,]          0         1        0
+[15,]          0         0        0
+[16,]          0         0        0
+[17,]          0         0        0
+[18,]          0         0        0
+[19,]          0         0        0
+[20,]          0         0        0
+[21,]          0         0        0
+[22,]          0         0        0
+[23,]          0         0        0
+[24,]          0         1        0
+[25,]          0         0        0
+[26,]          0         0        0
+[27,]          0         0        0
+[28,]          0         0        1
+[29,]          0         0        0
+[30,]          0         0        0
+[31,]          0         0        0
+[32,]          0         0        0
+[33,]          0         0        0
+[34,]          0         0        0
+[35,]          0         0        0
+[36,]          0         0        0
+[37,]          0         0        0
+[38,]          0         0        0
+[39,]          0         0        0
+[40,]          0         0        0
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>residual_outliers</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

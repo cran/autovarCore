@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Index. autovarCore 1.0-0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">autovarCore 1.0-0</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <div class="row">
+  <div class="span8">
+    <p><a href="https://circleci.com/gh/roqua/autovarCore"><img src="https://circleci.com/gh/roqua/autovarCore.png?style=shield&amp;circle-token=6934b57a8e350e98f46f7798cf9347dce3c0d74f" alt="Circle CI"/></a></p>
+
+<h1>AutovarCore</h1>
+
+<p>AutovarCore generates networks given a data frame. AutovarCore is a simplified/efficient version of <a href="https://github.com/roqua/autovar">Autovar</a>.</p>
+
+<p>To install, type the following:</p>
+
+<pre><code>install.packages(&#39;devtools&#39;)
+devtools::install_github(&#39;roqua/autovarCore&#39;)
+</code></pre>
+
+<p>For more information on Autovar, see <a href="https://autovar.nl">autovar.nl</a>.</p>
+
+<h4>Should I use Autovar or AutovarCore?</h4>
+
+<p>You should use Autovar if you</p>
+
+<ul>
+<li>Prefer a slightly better model fit over a model with less outlier dummies (less outlier dummies means that the model explains more of the measurements).</li>
+<li>Are okay with Autovar sometimes returning NULL because it could not find any models that passed all residual tests.</li>
+<li>Need VAR models with more than one lag or with zero lags.</li>
+<li>Need models with automatically determined restrictions.</li>
+<li>Need debugging information such as a full list of all evaluated models.</li>
+<li>Want detailed summary information such as a plot of contemporaneous correlations or Granger causalities.</li>
+<li>Need named dummy variables for interpretation (e.g., &ldquo;morning&rdquo;, &ldquo;afternoon&rdquo;, &ldquo;Monday&rdquo;, &ldquo;Tuesday&rdquo; instead of &ldquo;day_part_1&rdquo;, &ldquo;day_part_1&rdquo;, &ldquo;day_3&rdquo;, &ldquo;day_4&rdquo;)</li>
+</ul>
+
+<p>You should use AutovarCore if you</p>
+
+<ul>
+<li>Prefer a model with less outlier dummies over a model with a slightly better model fit (less outlier dummies means that the model explains more of the measurements).</li>
+<li>Always want a list of best models even if those do not pass all residual tests at the default p-level (this is indicated by the &#39;bucket&#39; property, see ?autovar for details).</li>
+<li>Are not interested in any models except for models with lag 1 and models with lag 2 where the second lag is autoregressive only.</li>
+<li>May have missing data (i.e., NA values). Autovar also has a function &ldquo;impute_dataframe&rdquo; to impute values, but AutovarCore does this automatically (if needed).</li>
+<li>Need more flexibility as to which residual tests should constitute model validity (e.g., portmanteau, portmanteau_squared, skewness, kurtosis, joint_sktest). Autovar uses a fixed set of residual tests.</li>
+<li>Deem performance to be an issue and prefer memory-efficient and fast code.</li>
+</ul>
+
+<h4>Example use</h4>
+
+<pre><code>library(&#39;autovarCore&#39;)
+
+# AutovarCore requires input data in data.frame format.
+# If you have data in a .csv, .dta, or .sav file, use
+# the &#39;foreign&#39; library to load this data into R first.
+# (You may need to type:
+#    install.packages(&#39;foreign&#39;)
+#  if you do not have the foreign library installed on
+#  your system.)
+library(&#39;foreign&#39;)
+
+# This example data set can be downloaded from
+# https://autovar.nl/datasets/aug_pp5_da.sav
+suppressWarnings(dfile &lt;- read.spss(&#39;~/Downloads/aug_pp5_da.sav&#39;))
+dframe &lt;- data.frame(Activity = dfile$Activity, Depression = dfile$Depression)
+
+# Call autovar with the given data frame. Type:
+#   ?autovar
+# (after having typed &quot;library(&#39;autovarCore&#39;)&quot;) to see 
+# which other options are available.
+models_found &lt;- autovar(dframe, selected_column_names = c(&#39;Activity&#39;, &#39;Depression&#39;))
+
+# Show details for the best model found
+print(models_found[[1]])
+</code></pre>
+
+
+    <h2>Help topics</h2>
+
+    <h3></h3>
+    
+    
+    <ul class="index">
+        
+      <li>
+        <code><a href="apply_ln_transformation.html">apply_ln_transformation</a></code><br />Applies the natural logarithm to the data set</li>
+            
+      <li>
+        <code><a href="assess_joint_sktest.html">assess_joint_sktest</a></code><br />Tests the skewness and kurtosis of a VAR model</li>
+            
+      <li>
+        <code><a href="assess_kurtosis.html">assess_kurtosis</a></code><br />Tests the kurtosis of a VAR model</li>
+            
+      <li>
+        <code><a href="assess_portmanteau.html">assess_portmanteau</a></code><br />Tests the white noise assumption for a VAR model using a portmanteau test on the residuals</li>
+            
+      <li>
+        <code><a href="assess_portmanteau_squared.html">assess_portmanteau_squared</a></code><br />Tests the homeskedasticity assumption for a VAR model using a portmanteau test on the squared residuals</li>
+            
+      <li>
+        <code><a href="assess_skewness.html">assess_skewness</a></code><br />Tests the skewness of a VAR model</li>
+            
+      <li>
+        <code><a href="autovar.html">autovar</a></code><br />Return the best VAR models found for a time series data set</li>
+            
+      <li>
+        <code><a href="autovarCore-package.html">autovarCore-package</a></code><br />Automated Vector Autoregression Networks
+</li>
+            
+      <li>
+        <code><a href="compete.html">compete</a></code><br />Returns the winning model</li>
+            
+      <li>
+        <code><a href="day_dummies.html">day_dummies</a></code><br />Calculate day dummy variables</li>
+            
+      <li>
+        <code><a href="daypart_dummies.html">daypart_dummies</a></code><br />Calculate day-part dummy variables</li>
+            
+      <li>
+        <code><a href="explode_dummies.html">explode_dummies</a></code><br />Explode dummies columns into separate dummy variables</li>
+            
+      <li>
+        <code><a href="impute_datamatrix.html">impute_datamatrix</a></code><br />Imputes the missing values in the input data</li>
+            
+      <li>
+        <code><a href="invalid_mask.html">invalid_mask</a></code><br />Calculate a bit mask to identify invalid outlier dummies</li>
+            
+      <li>
+        <code><a href="model_is_stable.html">model_is_stable</a></code><br />Eigenvalue stability condition checking</li>
+            
+      <li>
+        <code><a href="model_score.html">model_score</a></code><br />Return the model fit for the given varest model</li>
+            
+      <li>
+        <code><a href="needs_trend.html">needs_trend</a></code><br />Determines if a trend is required for the specified VAR model</li>
+            
+      <li>
+        <code><a href="rcpp_hello_world.html">rcpp_hello_world</a></code><br />Simple function using Rcpp</li>
+            
+      <li>
+        <code><a href="residual_outliers.html">residual_outliers</a></code><br />Calculate dummy variables to mask residual outliers</li>
+            
+      <li>
+        <code><a href="run_tests.html">run_tests</a></code><br />Execute a series of model validity assumptions</li>
+            
+      <li>
+        <code><a href="run_var.html">run_var</a></code><br />Calculate the VAR model and apply restrictions</li>
+            
+      <li>
+        <code><a href="select_valid_masks.html">select_valid_masks</a></code><br />Select and return valid dummy outlier masks</li>
+            
+      <li>
+        <code><a href="selected_columns.html">selected_columns</a></code><br />Convert an outlier_mask to a vector of column indices</li>
+            
+      <li>
+        <code><a href="trend_columns.html">trend_columns</a></code><br />Construct linear and quadratic trend columns</li>
+            
+      <li>
+        <code><a href="validate_params.html">validate_params</a></code><br />Validates the params given to the autovar function</li>
+            
+      <li>
+        <code><a href="validate_raw_dataframe.html">validate_raw_dataframe</a></code><br />Validates the dataframe given to the autovar function</li>
+    
+    </ul>
+  </div>
+  
+  <div class="span3 offset1">
+        
+    <h2>Dependencies</h2>
+    <ul>
+      
+      <li><strong>Imports</strong>: Rcpp, Amelia, jsonlite, parallel, urca, vars</li>
+      <li><strong>Suggests</strong>: testthat, roxygen2</li>
+      
+    </ul>
+    <h2>Authors</h2>
+    <ul>
+      <li><a href="mailto:ando.emerencia@gmail.com">Ando Emerencia</a> [aut, cre]</li>
+    </ul>
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
