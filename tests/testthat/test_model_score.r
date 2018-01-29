@@ -39,70 +39,58 @@ testdata_data_matrix <- function() {
 
 test_that('model_score returns the correct result', {
   varest <- autovarCore:::run_var(testdata_data_matrix(), NULL, 1)
-  expect_less_than(abs(autovarCore:::model_score(varest, 'AIC', FALSE) - 916.674), 0.0001)
-  expect_less_than(abs(autovarCore:::model_score(varest, 'BIC', FALSE) - 936.6368), 0.0001)
+  expect_lt(abs(autovarCore:::model_score(varest, 'AIC', FALSE) - 916.674), 0.0001)
+  expect_lt(abs(autovarCore:::model_score(varest, 'BIC', FALSE) - 936.6368), 0.0001)
 })
 
 test_that('model_score calls its subfunctions correctly for AIC', {
-  called_count_summary <<- 0
   called_count_nr_est <<- 0
   called_count_determine <<- 0
+  varst <<- list(obs = 2)
   with_mock(
-    `base::summary` = function(...) {
-      called_count_summary <<- called_count_summary + 1
-      expect_equal(list(...), list(1))
-      list(obs = 2)
-    },
     `autovarCore:::nr_estimated_parameters` = function(...) {
       called_count_nr_est <<- called_count_nr_est + 1
-      expect_equal(list(...), list(1))
+      expect_equal(list(...), list(varst))
       3
     },
     `autovarCore:::determine_loglikelihood` = function(...) {
       called_count_determine <<- called_count_determine + 1
-      expect_equal(list(...), list(1, FALSE))
+      expect_equal(list(...), list(varst, FALSE))
       4
     },
-    expect_equal(autovarCore:::model_score(1, 'AIC', FALSE),
+    expect_equal(autovarCore:::model_score(varst, 'AIC', FALSE),
                  -2 * 4 + 2 * 3)
   )
-  expect_equal(called_count_summary, 1)
   expect_equal(called_count_nr_est, 1)
   expect_equal(called_count_determine, 1)
-  rm(list = c('called_count_summary',
-              'called_count_nr_est',
-              'called_count_determine'), pos = '.GlobalEnv')
+  rm(list = c('called_count_nr_est',
+              'called_count_determine',
+              'varst'), pos = '.GlobalEnv')
 })
 
 test_that('model_score calls its subfunctions correctly for BIC', {
-  called_count_summary <<- 0
   called_count_nr_est <<- 0
   called_count_determine <<- 0
+  varst <<- list(obs = 2)
   with_mock(
-    `base::summary` = function(...) {
-      called_count_summary <<- called_count_summary + 1
-      expect_equal(list(...), list(1))
-      list(obs = 2)
-    },
     `autovarCore:::nr_estimated_parameters` = function(...) {
       called_count_nr_est <<- called_count_nr_est + 1
-      expect_equal(list(...), list(1))
+      expect_equal(list(...), list(varst))
       3
     },
     `autovarCore:::determine_loglikelihood` = function(...) {
       called_count_determine <<- called_count_determine + 1
-      expect_equal(list(...), list(1, FALSE))
+      expect_equal(list(...), list(varst, FALSE))
       4
     },
-    expect_less_than(abs(autovarCore:::model_score(1, 'BIC', FALSE) -
+    expect_lt(abs(autovarCore:::model_score(varst, 'BIC', FALSE) -
                  (-2 * 4 + log(2) * 3)), 0.000001)
   )
-  expect_equal(called_count_summary, 1)
   expect_equal(called_count_nr_est, 1)
   expect_equal(called_count_determine, 1)
-  rm(list = c('called_count_summary',
-              'called_count_nr_est',
-              'called_count_determine'), pos = '.GlobalEnv')
+  rm(list = c('called_count_nr_est',
+              'called_count_determine',
+              'varst'), pos = '.GlobalEnv')
 })
 
 test_that('model_score requires a valid criterion', {
@@ -130,10 +118,10 @@ test_that('determine_loglikelihood works correctly', {
   called_count <<- 0
   varest <<- 2
   with_mock(
-    `summary` = function(...) {
+    `autovarCore:::loglikelihood_for_normal` = function(...) {
       called_count <<- called_count + 1
       expect_equal(list(...), list(varest))
-      list(logLik = 3)
+      3
     },
     expect_equal(autovarCore:::determine_loglikelihood(varest, FALSE), 3)
   )
@@ -145,7 +133,7 @@ test_that('determine_loglikelihood works correctly', {
 test_that('loglikelihood_for_logtransformed returns the correct result', {
   varest <- autovarCore:::run_var(testdata_data_matrix(), NULL, 1)
   expected_result <- summary(varest)$logLik - sum(varest$y)
-  expect_less_than(abs(autovarCore:::loglikelihood_for_logtransformed(varest) - expected_result),
+  expect_lt(abs(autovarCore:::loglikelihood_for_logtransformed(varest) - expected_result),
                    0.0000001)
 })
 
