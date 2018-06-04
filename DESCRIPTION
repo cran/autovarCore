@@ -1,8 +1,8 @@
 Package: autovarCore
 Type: Package
 Title: Automated Vector Autoregression Models and Networks
-Version: 1.0-2
-Date: 2018-01-29
+Version: 1.0-4
+Date: 2018-06-04
 Authors@R: c(person("Ando","Emerencia",role = c("aut","cre"),
     email = "ando.emerencia@gmail.com"))
 BugReports: https://github.com/roqua/autovarcore/issues
@@ -25,7 +25,7 @@ Imports: Rcpp (>= 0.11.4), Amelia, jsonlite, parallel, stats, urca,
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
 NeedsCompilation: yes
-Packaged: 2018-01-29 17:39:44 UTC; ando
+Packaged: 2018-06-04 16:26:37 UTC; ando
 Author: Ando Emerencia [aut, cre]
 Repository: CRAN
-Date/Publication: 2018-01-29 17:50:53 UTC
+Date/Publication: 2018-06-04 17:43:35 UTC
